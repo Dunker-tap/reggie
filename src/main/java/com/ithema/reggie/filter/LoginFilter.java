@@ -1,6 +1,7 @@
 package com.ithema.reggie.filter;
 
 import com.alibaba.fastjson.JSON;
+import com.ithema.reggie.common.BaseContext;
 import com.ithema.reggie.common.R;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.AntPathMatcher;
@@ -55,6 +56,10 @@ public class LoginFilter implements Filter {
         Object o = request.getSession().getAttribute("employee");
         if (o != null) {
             log.info("本次登录的用户的id:{}", o);
+            //用户已经登录了
+            Long empId = (Long) o;
+            BaseContext.setCurrentId(empId);
+            
             //经过测试，过滤器可以生效
             chain.doFilter(request, response);
             return;

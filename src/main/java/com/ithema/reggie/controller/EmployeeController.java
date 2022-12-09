@@ -12,7 +12,6 @@ import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDateTime;
 
 @Slf4j
 @RestController
@@ -85,14 +84,14 @@ public class EmployeeController {
         String password = DigestUtils.md5DigestAsHex("123456".getBytes());
         employee.setPassword(password);
         //设置创建时间和更新数据的时间
-        employee.setCreateTime(LocalDateTime.now());
-        employee.setUpdateTime(LocalDateTime.now());
+//        employee.setCreateTime(LocalDateTime.now());
+//        employee.setUpdateTime(LocalDateTime.now());
 
         //获取当前用户登录的id
         //用户的id是雪花算法自动生成的，主要就是为了解决在分布式的情况下如何实现不生成相同的用户id
         long empId = (long) request.getSession().getAttribute("employee");
-        employee.setCreateUser(empId);
-        employee.setUpdateUser(empId);
+//        employee.setCreateUser(empId);
+//        employee.setUpdateUser(empId);
 
         employeeService.save(employee);
 
@@ -118,15 +117,31 @@ public class EmployeeController {
     }
 
     //根据id修改员工信息
+    //可以修改基本信息，也可以修改状态信息
     @PutMapping
     public R<String> update(HttpServletRequest request, @RequestBody Employee employee) {
         log.info("用户信息:{}", employee.toString());
         //获取id
         Long empId = (Long) request.getSession().getAttribute("employee");
-        employee.setUpdateTime(LocalDateTime.now());
-        employee.setUpdateUser(empId);
+//        employee.setUpdateTime(LocalDateTime.now());
+//        employee.setUpdateUser(empId);
         //调用接口中封装好的更新方法
         employeeService.updateById(employee);
         return R.success("员工信息修改成功");
+    }
+
+    /**
+     * 根据id查询员工信息
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping("/{id}")
+    public R<Employee> getById(@PathVariable Long id) {
+        Employee employee = employeeService.getById(id);
+        if (employee != null) {
+            return R.success(employee);
+        }
+        return R.error("没有查询到对应的员工的信息");
     }
 }
