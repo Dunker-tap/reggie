@@ -1,0 +1,22 @@
+server:
+  port: 80
+#  servlet:   这里一定不能手贱重新定义访问路径，这样的话前端传输过来的数据就会出现访问路径不一致的问题，从而导致接口404异常
+#    context-path: /reggie
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/regie?characterEncoding=UTF-8&useSSL=false
+    username: root
+    password: "root"
+mybatis-plus:
+  configuration:
+    # 表名          实体类名
+    # address_book  AddressBookv
+    # user_name     userName
+    #在映射实体或者属性时，将数据库中表名和字段名中的下划线去掉，按照驼峰命名法映射
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      id-type: ASSIGN_ID
